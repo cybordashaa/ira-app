@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:ira_app/components/custom_surfix_icon.dart';
 import 'package:ira_app/components/default_button.dart';
 import 'package:ira_app/constants.dart';
-import 'package:ira_app/controller/AuthService.dart';
+import 'package:ira_app/service/AuthService.dart';
 import 'package:ira_app/controller/DatabasHelper.dart';
 import 'package:ira_app/screens/login_screen/login_screen.dart';
 import 'package:ira_app/size_config.dart';

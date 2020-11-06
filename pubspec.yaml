@@ -35,6 +35,14 @@ dependencies:
   shared_preferences: ^0.5.12+2
   http: ^0.12.2
   socket_io_client: ^0.9.11
+  image_picker: ^0.6.7+7
+  file_picker: ^1.13.3
+  photo_view: ^0.10.2
+  scrollable_positioned_list: ^0.1.7
+  # state management
+  mobx: ^1.2.1+4
+  flutter_mobx: ^1.1.0+2
+  get_it: ^5.0.1
 
 dev_dependencies:
   flutter_test:

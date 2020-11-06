@@ -5,7 +5,7 @@ import 'package:ira_app/components/custom_surfix_icon.dart';
 import 'package:ira_app/components/default_button.dart';
 import 'package:ira_app/components/form_error.dart';
 import 'package:ira_app/constants.dart';
-import 'package:ira_app/controller/AuthService.dart';
+import 'package:ira_app/service/AuthService.dart';
 import 'package:ira_app/screens/home_screen/home_screen.dart';
 import 'package:ira_app/size_config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -168,13 +168,11 @@ class _LoginFormState extends State<LoginForm> {
 
     if (res.statusCode == 200) {
       var body = json.decode(res.body);
-
-      print("${body}");
       if (body['result'] == 'success') {
-        print("${body}");
         SharedPreferences localStorage = await SharedPreferences.getInstance();
         localStorage.setString('token', body['token']);
         localStorage.setString('user', json.encode(body['user']));
+        localStorage.setString('myID', body['user']['_id']);
         Navigator.pushReplacementNamed(context, HomeScreen.routeName);
       } else if (body['result'] == 'fail') {
         showDialog(

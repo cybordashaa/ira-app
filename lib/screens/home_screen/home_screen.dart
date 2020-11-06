@@ -2,6 +2,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ira_app/constants.dart';
+import 'package:ira_app/core/get_it.dart';
+import 'package:ira_app/helper/socket_helper.dart';
+import 'package:ira_app/screens/chat/chat.dart';
 import 'package:ira_app/screens/chat_screen/chat_screen.dart';
 import 'package:ira_app/screens/dashboard_screen/dashboard_screen.dart';
 import 'package:ira_app/screens/login_screen/login_screen.dart';
@@ -11,6 +14,8 @@ import 'package:ira_app/screens/profile_screen/profile_screen.dart';
 import 'package:ira_app/size_config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+
+import 'package:ira_app/viewModel/chat_view_model_list.dart';
 
 class HomeScreen extends StatefulWidget {
   static String routeName = '/home_screen';
@@ -24,6 +29,7 @@ class HomeScreenState extends State<HomeScreen>
   String token;
   @override
   void initState() {
+    SocketHelper.shared.connectSocket();
     _getUserInfo();
     controller = new TabController(
       vsync: this,
@@ -123,10 +129,14 @@ class HomeScreenState extends State<HomeScreen>
       floatingActionButton: FloatingActionButton(
         elevation: 10.0,
         backgroundColor: Colors.white,
-        onPressed: () => {
+        onPressed: () async {
           // Navigator.pushNamed(context, ChatScreen.routeName)
-          logout()
+          // logout()
           // Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new ChatScreen(token: token )))
+          SocketHelper.shared.joinRoom(ops: false);
+          getIt<ChatListState>().messageList.clear();
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => ChatView()));
         },
         child: SvgPicture.asset(
           'assets/icons/logo.svg',
@@ -146,6 +156,5 @@ class HomeScreenState extends State<HomeScreen>
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (BuildContext context) => LoginScreen()),
         (Route<dynamic> route) => false);
-    ;
   }
 }
