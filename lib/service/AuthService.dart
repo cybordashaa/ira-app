@@ -5,7 +5,7 @@ import 'package:ira_app/models/message.dart';
 
 class AuthService {
   static final shared = AuthService();
-  String host = "http://192.168.0.111:8001/";
+  String host = "http://192.168.1.4:8001/";
   postData(data, apiUrl) async {
     var fullUrl = host + apiUrl;
     return await http.post(fullUrl,

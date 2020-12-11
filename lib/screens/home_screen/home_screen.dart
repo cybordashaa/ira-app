@@ -29,7 +29,7 @@ class HomeScreenState extends State<HomeScreen>
   String token;
   @override
   void initState() {
-    SocketHelper.shared.connectSocket();
+    // SocketHelper.shared.connectSocket();
     _getUserInfo();
     controller = new TabController(
       vsync: this,
@@ -119,7 +119,7 @@ class HomeScreenState extends State<HomeScreen>
         controller: controller,
         physics: NeverScrollableScrollPhysics(),
         children: [
-          new DashboardScreen(),
+          Padding(padding: EdgeInsets.all(5.0), child: new DashboardScreen()),
           new NewsScreen(),
           new NewsScreen(),
           new NotificationScreen(),
