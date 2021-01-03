@@ -120,6 +120,7 @@ class HomeScreenState extends State<HomeScreen>
         physics: NeverScrollableScrollPhysics(),
         children: [
           Padding(padding: EdgeInsets.all(5.0), child: new DashboardScreen()),
+          // new NewsHomeScreen(),
           new NewsScreen(),
           new NewsScreen(),
           new NotificationScreen(),

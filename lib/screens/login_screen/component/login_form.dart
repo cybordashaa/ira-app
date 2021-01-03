@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ira_app/components/custom_surfix_icon.dart';
 import 'package:ira_app/components/default_button.dart';
 import 'package:ira_app/components/form_error.dart';
@@ -164,17 +165,50 @@ class _LoginFormState extends State<LoginForm> {
       "email": email,
       "password": password,
     };
-    var res = await AuthService().postData(data, 'user/login');
-
-    if (res.statusCode == 200) {
-      var body = json.decode(res.body);
-      if (body['result'] == 'success') {
-        SharedPreferences localStorage = await SharedPreferences.getInstance();
-        localStorage.setString('token', body['token']);
-        localStorage.setString('user', json.encode(body['user']));
-        localStorage.setString('myID', body['user']['_id']);
-        Navigator.pushReplacementNamed(context, HomeScreen.routeName);
-      } else if (body['result'] == 'fail') {
+    try {
+      var res = await AuthService().postData(data, 'user/login');
+      if (res.statusCode == 200) {
+        var body = json.decode(res.body);
+        if (body['result'] == 'success') {
+          SharedPreferences localStorage =
+              await SharedPreferences.getInstance();
+          localStorage.setString('token', body['token']);
+          localStorage.setString('user', json.encode(body['user']));
+          localStorage.setString('myID', body['user']['_id']);
+          Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+        } else if (body['result'] == 'fail') {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text(
+                "Амжилтгүй",
+                textAlign: TextAlign.center,
+              ),
+              elevation: 5.0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              actions: <Widget>[
+                new RaisedButton(
+                    elevation: 1.0,
+                    color: kPrimaryColor,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.0)),
+                    child: new Text(
+                      "Ok",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    onPressed: () => Navigator.of(context).pop()),
+              ],
+              content: Text(
+                body['message'],
+                style: TextStyle(fontSize: 12),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          );
+        }
+      } else {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
@@ -199,44 +233,27 @@ class _LoginFormState extends State<LoginForm> {
                   onPressed: () => Navigator.of(context).pop()),
             ],
             content: Text(
-              body['message'],
+              'error',
               style: TextStyle(fontSize: 12),
               textAlign: TextAlign.center,
             ),
           ),
         );
       }
-    } else {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text(
-            "Амжилтгүй",
-            textAlign: TextAlign.center,
-          ),
-          elevation: 5.0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          actions: <Widget>[
-            new RaisedButton(
-                elevation: 1.0,
-                color: kPrimaryColor,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.0)),
-                child: new Text(
-                  "Ok",
-                  style: TextStyle(color: Colors.white),
-                ),
-                onPressed: () => Navigator.of(context).pop()),
-          ],
-          content: Text(
-            'error',
-            style: TextStyle(fontSize: 12),
-            textAlign: TextAlign.center,
-          ),
-        ),
-      );
+    } catch (err) {
+      if (err.toString().contains("SocketException")) {
+        Fluttertoast.showToast(
+          msg: "Холболтоо шалгана уу!",
+          toastLength: Toast.LENGTH_SHORT,
+          timeInSecForIosWeb: 5,
+        );
+      } else {
+        Fluttertoast.showToast(
+          msg: "алдаа гарлаа",
+          toastLength: Toast.LENGTH_SHORT,
+          timeInSecForIosWeb: 5,
+        );
+      }
     }
 
     setState(() {

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ira_app/components/custom_surfix_icon.dart';
 import 'package:ira_app/components/default_button.dart';
 import 'package:ira_app/constants.dart';
@@ -342,16 +343,80 @@ class _RegisterFormState extends State<RegisterForm> {
       "password": password,
       "phone": phoneNumber
     };
-    var res = await AuthService().postData(data, 'user/register');
+    try {
+      var res = await AuthService().postData(data, 'user/register');
 
-    if (res.statusCode == 200) {
-      var body = json.decode(res.body);
-      if (body['result'] == 'success') {
+      if (res.statusCode == 200) {
+        var body = json.decode(res.body);
+        if (body['result'] == 'success') {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text(
+                "Амжилттай",
+                textAlign: TextAlign.center,
+              ),
+              elevation: 5.0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              actions: <Widget>[
+                new RaisedButton(
+                    elevation: 1.0,
+                    color: kPrimaryColor,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.0)),
+                    child: new Text(
+                      "Ok",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    onPressed: () => Navigator.of(context).pop()),
+              ],
+              content: Text(
+                "${body['message']} та нэвтэрч орно уу!",
+                style: TextStyle(fontSize: 12),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          );
+        } else if (body['result'] == 'fail') {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text(
+                "Амжилтгүй",
+                textAlign: TextAlign.center,
+              ),
+              elevation: 5.0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              actions: <Widget>[
+                new RaisedButton(
+                    elevation: 1.0,
+                    color: kPrimaryColor,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.0)),
+                    child: new Text(
+                      "Ok",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    onPressed: () => Navigator.of(context).pop()),
+              ],
+              content: Text(
+                body['message'],
+                style: TextStyle(fontSize: 12),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          );
+        }
+      } else {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
             title: Text(
-              "Амжилттай",
+              "error",
               textAlign: TextAlign.center,
             ),
             elevation: 5.0,
@@ -371,76 +436,27 @@ class _RegisterFormState extends State<RegisterForm> {
                   onPressed: () => Navigator.of(context).pop()),
             ],
             content: Text(
-              "${body['message']} та нэвтэрч орно уу!",
-              style: TextStyle(fontSize: 12),
-              textAlign: TextAlign.center,
-            ),
-          ),
-        );
-      } else if (body['result'] == 'fail') {
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text(
-              "Амжилтгүй",
-              textAlign: TextAlign.center,
-            ),
-            elevation: 5.0,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            actions: <Widget>[
-              new RaisedButton(
-                  elevation: 1.0,
-                  color: kPrimaryColor,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5.0)),
-                  child: new Text(
-                    "Ok",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  onPressed: () => Navigator.of(context).pop()),
-            ],
-            content: Text(
-              body['message'],
+              'error',
               style: TextStyle(fontSize: 12),
               textAlign: TextAlign.center,
             ),
           ),
         );
       }
-    } else {
-      print("${res.body}");
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text(
-            "error",
-            textAlign: TextAlign.center,
-          ),
-          elevation: 5.0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          actions: <Widget>[
-            new RaisedButton(
-                elevation: 1.0,
-                color: kPrimaryColor,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.0)),
-                child: new Text(
-                  "Ok",
-                  style: TextStyle(color: Colors.white),
-                ),
-                onPressed: () => Navigator.of(context).pop()),
-          ],
-          content: Text(
-            'error',
-            style: TextStyle(fontSize: 12),
-            textAlign: TextAlign.center,
-          ),
-        ),
-      );
+    } catch (err) {
+      if (err.toString().contains("SocketException")) {
+        Fluttertoast.showToast(
+          msg: "Холболтоо шалгана уу!",
+          toastLength: Toast.LENGTH_SHORT,
+          timeInSecForIosWeb: 5,
+        );
+      } else {
+        Fluttertoast.showToast(
+          msg: "алдаа гарлаа",
+          toastLength: Toast.LENGTH_SHORT,
+          timeInSecForIosWeb: 5,
+        );
+      }
     }
 
     setState(() {

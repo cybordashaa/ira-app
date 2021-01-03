@@ -7,9 +7,13 @@ class AuthService {
   static final shared = AuthService();
   String host = "http://192.168.1.4:8001/";
   postData(data, apiUrl) async {
-    var fullUrl = host + apiUrl;
-    return await http.post(fullUrl,
-        body: jsonEncode(data), headers: _setHeaders());
+    try {
+      var fullUrl = host + apiUrl;
+      return await http.post(fullUrl,
+          body: jsonEncode(data), headers: _setHeaders());
+    } catch (er) {
+      return er;
+    }
   }
 
   authPostData(data, apiUrl, token) async {

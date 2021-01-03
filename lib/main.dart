@@ -1,11 +1,13 @@
 import 'dart:io';
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ira_app/Theme.dart';
 import 'package:ira_app/core/get_it.dart';
 import 'package:ira_app/routes.dart';
 import 'package:ira_app/screens/login_screen/login_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:ira_app/provider/home_provider.dart';
 
 void main() async {
   HttpOverrides.global = new MyHttpOverrides();
@@ -14,7 +16,12 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-  runApp(MyApp());
+  runApp(
+    MultiProvider(
+      providers: [ChangeNotifierProvider(create: (_) => getIt<HomeProvider>())],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
