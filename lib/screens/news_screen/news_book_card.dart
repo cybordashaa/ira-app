@@ -71,7 +71,8 @@ class NewsBookCard extends StatelessWidget {
                         width: 350,
                         child: Center(
                           child: CircularProgressIndicator(
-                            backgroundColor: kPrimaryColor,
+                            valueColor: new AlwaysStoppedAnimation<Color>(
+                                kPrimaryColor),
                           ),
                         ),
                       ),

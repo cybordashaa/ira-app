@@ -15,12 +15,12 @@ class DashboardScreen extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
                 color: Colors.black12,
-                spreadRadius: 2,
-                blurRadius: 10,
+                spreadRadius: 0.0,
+                blurRadius: 0,
               ),
             ],
           ),

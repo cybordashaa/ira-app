@@ -14,7 +14,6 @@ class Api {
 
     News news;
     if (res.statusCode == 200) {
-      print(res.body);
       final jsonResponse = json.decode(res.body);
       news = News.fromJson(jsonResponse);
     } else {

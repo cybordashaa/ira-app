@@ -25,7 +25,7 @@ class HomeScreen extends StatefulWidget {
 class HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   TabController controller;
-  var userData;
+  // var userData;
   String token;
   @override
   void initState() {
@@ -44,11 +44,11 @@ class HomeScreenState extends State<HomeScreen>
   // get token use info check
   void _getUserInfo() async {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
-    var userJson = localStorage.getString('user');
+    // var userJson = localStorage.getString('user');
     var token = localStorage.getString('token');
-    var user = json.decode(userJson);
+    // var user = json.decode(userJson);
     setState(() {
-      userData = user;
+      // userData = user;
       token = token;
     });
   }
@@ -70,6 +70,7 @@ class HomeScreenState extends State<HomeScreen>
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
+      backgroundColor: Color(0xFFF5F6F9),
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(70.0),
         child: new AppBar(
@@ -147,15 +148,5 @@ class HomeScreenState extends State<HomeScreen>
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,
     );
-  }
-
-  void logout() async {
-    // logout from the server ...
-    SharedPreferences localStorage = await SharedPreferences.getInstance();
-    localStorage.remove('user');
-    localStorage.remove('token');
-    Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (BuildContext context) => LoginScreen()),
-        (Route<dynamic> route) => false);
   }
 }

@@ -3,6 +3,7 @@ import 'package:ira_app/constants.dart';
 
 ThemeData theme() {
   return ThemeData(
+    primaryColor: kPrimaryColor,
     scaffoldBackgroundColor: Colors.white,
     fontFamily: "UbuntuMono",
     appBarTheme: appBarTheme(),
@@ -32,7 +33,7 @@ InputDecorationTheme inputDecorationTheme() {
 
 TextTheme textTheme() {
   return TextTheme(
-    bodyText1: TextStyle(color: kTextColor),
+    bodyText1: TextStyle(color: kTextColor, fontSize: 14),
     bodyText2: TextStyle(color: kTextColor),
   );
 }

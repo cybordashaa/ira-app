@@ -6,6 +6,7 @@ import 'package:ira_app/components/custom_surfix_icon.dart';
 import 'package:ira_app/components/default_button.dart';
 import 'package:ira_app/components/form_error.dart';
 import 'package:ira_app/constants.dart';
+import 'package:ira_app/models/user_data.dart';
 import 'package:ira_app/service/AuthService.dart';
 import 'package:ira_app/screens/home_screen/home_screen.dart';
 import 'package:ira_app/size_config.dart';
@@ -17,6 +18,7 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
+  UserData _userData = UserData();
   String email;
   String password;
   bool isLoading = false;
@@ -172,8 +174,19 @@ class _LoginFormState extends State<LoginForm> {
         if (body['result'] == 'success') {
           SharedPreferences localStorage =
               await SharedPreferences.getInstance();
+          _userData = UserData.fromJson(body);
+          // user data save to local
+          localStorage.setString('avatar', _userData.avatar);
+          localStorage.setInt('wallet', _userData.wallet);
+          localStorage.setString('id', _userData.id);
+          localStorage.setString('firstname', _userData.firstname);
+          localStorage.setString('lastname', _userData.lastname);
+          localStorage.setString('email', _userData.email);
+          localStorage.setString('address', _userData.address);
+          localStorage.setString('phone', _userData.phone);
+
           localStorage.setString('token', body['token']);
-          localStorage.setString('user', json.encode(body['user']));
+          // localStorage.setString('user', json.encode(body['user']));
           localStorage.setString('myID', body['user']['_id']);
           Navigator.pushReplacementNamed(context, HomeScreen.routeName);
         } else if (body['result'] == 'fail') {
@@ -243,7 +256,7 @@ class _LoginFormState extends State<LoginForm> {
     } catch (err) {
       if (err.toString().contains("SocketException")) {
         Fluttertoast.showToast(
-          msg: "Холболтоо шалгана уу!",
+          msg: "Холболтын алдаа гарлаа!",
           toastLength: Toast.LENGTH_SHORT,
           timeInSecForIosWeb: 5,
         );
