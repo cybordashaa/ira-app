@@ -7,6 +7,7 @@ class UserData {
   String email;
   String phone;
   String address;
+  String register;
 
   UserData(
       {this.avatar,
@@ -26,6 +27,7 @@ class UserData {
     lastname = json['user']['lastname'] ?? '';
     email = json['user']['email'] ?? '';
     phone = json['user']['phone'] ?? '';
+    register = json['user']['registration_number'] ?? '';
   }
 
   Map<String, dynamic> toJson() {

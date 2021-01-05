@@ -5,7 +5,7 @@ ThemeData theme() {
   return ThemeData(
     primaryColor: kPrimaryColor,
     scaffoldBackgroundColor: Colors.white,
-    fontFamily: "UbuntuMono",
+    fontFamily: "Roboto-Regular",
     appBarTheme: appBarTheme(),
     textTheme: textTheme(),
     inputDecorationTheme: inputDecorationTheme(),

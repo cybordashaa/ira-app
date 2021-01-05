@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ira_app/components/alert_logout.dart';
+import 'package:ira_app/screens/profile_screen/more_screen/profile_detail.dart';
 import './profile_pic.dart';
 import './profile_menu_data.dart';
 import './profile_card.dart';
@@ -37,7 +38,11 @@ class Body extends StatelessWidget {
           ProfileMenu(
             text: 'Хувийн мэдээлэл',
             icon: "assets/icons/user.svg",
-            press: () {},
+            press: () {
+              Navigator.of(context).push(new MaterialPageRoute(
+                  builder: (context) => new ProfileDetail()));
+              // Navigator.pushNamed(context, '/profileDetail');
+            },
           ),
           ProfileMenu(
               text: 'Тохиргоо', icon: "assets/icons/gear.svg", press: () {}),
