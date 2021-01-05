@@ -126,7 +126,7 @@ class ProfileCard extends StatelessWidget {
                             style: TextStyle(
                                 fontSize: 11,
                                 fontFamily: 'Raleway-Regular',
-                                color: kPrimaryColor)),
+                                color: Color(0xFF22A1AD))),
                       )),
                 )
               ],

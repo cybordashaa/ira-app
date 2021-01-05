@@ -1,9 +1,9 @@
 import 'dart:io';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ira_app/Theme.dart';
 import 'package:ira_app/core/get_it.dart';
+import 'package:ira_app/provider/profile_provider.dart';
 import 'package:ira_app/routes.dart';
 import 'package:ira_app/screens/login_screen/login_screen.dart';
 import 'package:provider/provider.dart';
@@ -18,7 +18,10 @@ void main() async {
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   runApp(
     MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => getIt<HomeProvider>())],
+      providers: [
+        ChangeNotifierProvider(create: (_) => getIt<HomeProvider>()),
+        ChangeNotifierProvider(create: (_) => getIt<ProfileProvider>())
+      ],
       child: MyApp(),
     ),
   );

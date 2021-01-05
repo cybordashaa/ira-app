@@ -7,9 +7,11 @@ import 'package:ira_app/components/default_button.dart';
 import 'package:ira_app/components/form_error.dart';
 import 'package:ira_app/constants.dart';
 import 'package:ira_app/models/user_data.dart';
+import 'package:ira_app/provider/profile_provider.dart';
 import 'package:ira_app/service/AuthService.dart';
 import 'package:ira_app/screens/home_screen/home_screen.dart';
 import 'package:ira_app/size_config.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginForm extends StatefulWidget {
@@ -175,15 +177,9 @@ class _LoginFormState extends State<LoginForm> {
           SharedPreferences localStorage =
               await SharedPreferences.getInstance();
           _userData = UserData.fromJson(body);
-          // user data save to local
-          localStorage.setString('avatar', _userData.avatar);
-          localStorage.setInt('wallet', _userData.wallet);
-          localStorage.setString('id', _userData.id);
-          localStorage.setString('firstname', _userData.firstname);
-          localStorage.setString('lastname', _userData.lastname);
-          localStorage.setString('email', _userData.email);
-          localStorage.setString('address', _userData.address);
-          localStorage.setString('phone', _userData.phone);
+          // userData get provider
+          Provider.of<ProfileProvider>(context, listen: false)
+              .getProfile(_userData);
 
           localStorage.setString('token', body['token']);
           // localStorage.setString('user', json.encode(body['user']));
