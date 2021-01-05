@@ -38,6 +38,7 @@ class Body extends StatelessWidget {
           ProfileMenu(
             text: 'Хувийн мэдээлэл',
             icon: "assets/icons/user.svg",
+            iconLogo: Icons.arrow_forward_ios_sharp,
             press: () {
               Navigator.of(context).push(new MaterialPageRoute(
                   builder: (context) => new ProfileDetail()));
@@ -45,9 +46,15 @@ class Body extends StatelessWidget {
             },
           ),
           ProfileMenu(
-              text: 'Тохиргоо', icon: "assets/icons/gear.svg", press: () {}),
+              text: 'Тохиргоо',
+              icon: "assets/icons/gear.svg",
+              iconLogo: Icons.arrow_forward_ios_sharp,
+              press: () {}),
           ProfileMenu(
-              text: 'Тусламж', icon: "assets/icons/support.svg", press: () {}),
+              text: 'Тусламж',
+              icon: "assets/icons/support.svg",
+              iconLogo: Icons.arrow_forward_ios_sharp,
+              press: () {}),
           ProfileMenu(
             text: 'Гарах',
             icon: "assets/icons/shutdown.svg",
@@ -55,7 +62,6 @@ class Body extends StatelessWidget {
               Dialogs.yesAbortDialog(
                   context, 'Асуулт', 'Та гарахдаа итгэлтэй байна уу?');
             },
-            iconLogo: Icons.logout,
           ),
         ],
       ),

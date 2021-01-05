@@ -17,6 +17,7 @@ class ProfileMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var isIconLogo = iconLogo != null;
     // TODO: implement build
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
@@ -47,10 +48,12 @@ class ProfileMenu extends StatelessWidget {
               //     fontWeight: FontWeight.w600),
               style: Theme.of(context).textTheme.bodyText1,
             )),
-            Icon(
-              iconLogo != null ? iconLogo : Icons.arrow_forward_ios_sharp,
-              size: 18,
-            )
+            isIconLogo
+                ? Icon(
+                    iconLogo,
+                    size: 18,
+                  )
+                : Container()
           ],
         ),
       ),
