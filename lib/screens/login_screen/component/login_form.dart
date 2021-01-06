@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -249,22 +251,40 @@ class _LoginFormState extends State<LoginForm> {
           ),
         );
       }
-    } catch (err) {
-      if (err.toString().contains("SocketException")) {
+    } on TimeoutException catch (error) {
+      print("--timeout exception");
+      Fluttertoast.showToast(
+        msg: "${error.message}",
+        toastLength: Toast.LENGTH_SHORT,
+        timeInSecForIosWeb: 5,
+      );
+    } on SocketException catch (error) {
+      print("--socket exception");
+      if (error.message.toString() == 'Connection failed'.trim()) {
         Fluttertoast.showToast(
-          msg: "Холболтын алдаа гарлаа!",
+          msg: "Интернет холболтоо шалгана уу!",
           toastLength: Toast.LENGTH_SHORT,
           timeInSecForIosWeb: 5,
         );
       } else {
         Fluttertoast.showToast(
-          msg: "алдаа гарлаа",
+          msg: " Холболтын алдаа!",
           toastLength: Toast.LENGTH_SHORT,
           timeInSecForIosWeb: 5,
         );
       }
+    } catch (err) {
+      print("--$err");
+      Fluttertoast.showToast(
+        msg: "алдаа гарлаа",
+        toastLength: Toast.LENGTH_SHORT,
+        timeInSecForIosWeb: 5,
+      );
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
     }
-
     setState(() {
       isLoading = false;
     });

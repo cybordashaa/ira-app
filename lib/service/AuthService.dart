@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:ira_app/helper/preferences_helper.dart';
@@ -7,13 +8,12 @@ class AuthService {
   static final shared = AuthService();
   String host = "http://192.168.1.4:8001/";
   postData(data, apiUrl) async {
-    try {
-      var fullUrl = host + apiUrl;
-      return await http.post(fullUrl,
-          body: jsonEncode(data), headers: _setHeaders());
-    } catch (er) {
-      return er;
-    }
+    var fullUrl = host + apiUrl;
+    return await http
+        .post(fullUrl, body: jsonEncode(data), headers: _setHeaders())
+        .timeout(const Duration(seconds: 10), onTimeout: () {
+      throw TimeoutException('Дахин оролдоно уу');
+    });
   }
 
   authPostData(data, apiUrl, token) async {
