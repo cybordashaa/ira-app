@@ -17,7 +17,6 @@ class ProfileCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 20),
       padding: new EdgeInsets.only(left: 0, bottom: 8.0, right: 0),
       decoration: BoxDecoration(
           color: Colors.white,

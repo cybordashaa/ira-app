@@ -20,7 +20,7 @@ class ProfileMenu extends StatelessWidget {
     var isIconLogo = iconLogo != null;
     // TODO: implement build
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+      padding: const EdgeInsets.symmetric(vertical: 5),
       child: FlatButton(
         padding: EdgeInsets.all(20),
         shape: RoundedRectangleBorder(
