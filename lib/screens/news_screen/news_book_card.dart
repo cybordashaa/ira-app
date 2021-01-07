@@ -68,7 +68,7 @@ class NewsBookCard extends StatelessWidget {
                       ),
                       placeholder: (context, url) => Container(
                         height: 125,
-                        width: 350,
+                        width: MediaQuery.of(context).size.width,
                         child: Center(
                           child: CircularProgressIndicator(
                             valueColor: new AlwaysStoppedAnimation<Color>(
@@ -80,10 +80,10 @@ class NewsBookCard extends StatelessWidget {
                         "assets/images/place.png",
                         fit: BoxFit.cover,
                         height: 125,
-                        width: 350,
+                        width: MediaQuery.of(context).size.width,
                       ),
                       height: 125,
-                      width: 350,
+                      width: MediaQuery.of(context).size.width,
                       fit: BoxFit.cover,
                     ),
                   ),
