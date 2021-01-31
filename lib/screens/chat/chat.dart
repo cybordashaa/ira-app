@@ -12,7 +12,6 @@ import 'package:ira_app/helper/stream_controller_helper.dart';
 import 'package:ira_app/screens/chat/message_list.dart';
 import 'package:ira_app/viewModel/chat_view_model_list.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-import 'package:ira_app/models/message.dart';
 
 class ChatView extends StatefulWidget {
   @override
@@ -35,6 +34,7 @@ class _ChatViewState extends BaseState<ChatView> {
   void initState() {
     super.initState();
     getMessages();
+    SocketHelper.shared.connectSocket();
   }
 
   @override
@@ -91,13 +91,11 @@ class _ChatViewState extends BaseState<ChatView> {
                         SizedBox(
                           height: 5,
                         ),
-                        Observer(
-                          builder: (context) => Text(
-                            "isOnline hseg",
-                            style: TextStyle(
-                                color: Colors.blueGrey,
-                                fontWeight: FontWeight.bold),
-                          ),
+                        Text(
+                          "isOnline hseg",
+                          style: TextStyle(
+                              color: Colors.blueGrey,
+                              fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
@@ -176,7 +174,8 @@ class _ChatViewState extends BaseState<ChatView> {
                               SocketHelper.shared.sendMessage(
                                   message: _messageController.text,
                                   file: false,
-                                  type: 'none');
+                                  type: 'text',
+                                  whoType: 'user');
                               _messageController.clear();
                             }
                           }))

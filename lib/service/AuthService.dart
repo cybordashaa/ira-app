@@ -32,19 +32,19 @@ class AuthService {
 
   Future<List<dynamic>> fetchMessageList() async {
     var myID = await SharedPreferencesHelper.shared.getMyID();
-    print("---$myID");
     var token = await SharedPreferencesHelper.shared.getUserToken();
-    var body = {"name": myID, "user": myID, "operator": null};
+    var email = await SharedPreferencesHelper.shared.getUserEmail();
+    var body = {"useremail": email};
     var response = await this.authPostData(body, 'chatroom', token);
     if (response.statusCode == 200) {
-      var list = (json.decode(response.body)['roomMessages'] as List)
+      var list = (json.decode(response.body)['messages'] as List)
           .map((e) => Message.fromJson(e))
           .toList();
       // var data = json.decode(response.body['roomMessages']);
       // List<Message> list = List<Message>.from(data)
       //     .map((Map model) => Message.fromJson(model))
       //     .toList();
-      print("----${list[2].message.split(',')[1]}");
+      // print("----${list[2].message.split(',')[1]}");
       return list;
     } else {
       return List<Message>();

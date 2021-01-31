@@ -29,7 +29,7 @@ class HomeScreenState extends State<HomeScreen>
   String token;
   @override
   void initState() {
-    // SocketHelper.shared.connectSocket();
+    SocketHelper.shared.connectSocket();
     _getUserInfo();
     controller = new TabController(
       vsync: this,

@@ -184,6 +184,7 @@ class _LoginFormState extends State<LoginForm> {
               .getProfile(_userData);
 
           localStorage.setString('token', body['token']);
+          localStorage.setString('email', _userData.email);
           // localStorage.setString('user', json.encode(body['user']));
           localStorage.setString('myID', body['user']['_id']);
           Navigator.pushReplacementNamed(context, HomeScreen.routeName);

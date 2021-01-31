@@ -42,12 +42,20 @@ mixin _$ChatListState on ChatListVM, Store {
 
   @override
   dynamic addMessage(
-      {String message, User user, String op, bool file, String file_type}) {
+      {String message,
+      String op,
+      bool file,
+      String file_type,
+      String whoType}) {
     final _$actionInfo =
         _$ChatListVMActionController.startAction(name: 'ChatListVM.addMessage');
     try {
       return super.addMessage(
-          message: message, op: op, file: file, file_type: file_type);
+          message: message,
+          op: op,
+          file: file,
+          file_type: file_type,
+          whoType: whoType);
     } finally {
       _$ChatListVMActionController.endAction(_$actionInfo);
     }

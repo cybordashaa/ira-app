@@ -23,6 +23,12 @@ class SharedPreferencesHelper {
     return token;
   }
 
+  Future<String> getUserEmail() async {
+    _prefs = await SharedPreferences.getInstance();
+    var email = _prefs.getString('email');
+    return email;
+  }
+
   // return myId
   Future<String> getMyID() async {
     _prefs = await SharedPreferences.getInstance();

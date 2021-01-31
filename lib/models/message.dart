@@ -4,6 +4,7 @@ class Message {
   bool file;
   String file_type;
   bool seen;
+  String whoType;
   String createdAt;
 
   Message({
@@ -12,6 +13,7 @@ class Message {
     this.file,
     this.file_type,
     this.seen,
+    this.whoType,
     this.createdAt,
   });
 
@@ -21,6 +23,7 @@ class Message {
     file = json['file'] ?? false;
     file_type = json['file_type'] ?? "";
     seen = json['seen'] ?? false;
+    whoType = json['whoType'] ?? "";
     createdAt = json['createdAt'];
   }
 }

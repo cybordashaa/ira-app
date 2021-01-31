@@ -10,5 +10,6 @@ class ChatViewModel {
   bool get file => _message.file;
   String get fileType => _message.file_type;
   bool get seen => _message.seen;
+  String get whoType => _message.whoType;
   String get createdAt => _message.createdAt;
 }

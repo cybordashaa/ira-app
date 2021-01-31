@@ -21,12 +21,13 @@ class ChatMessage extends StatelessWidget {
 
   Widget buildImage(BuildContext context) {
     return Align(
-      alignment:
-          message.op == null ? Alignment.centerRight : Alignment.centerLeft,
+      alignment: message.whoType == 'user'
+          ? Alignment.centerRight
+          : Alignment.centerLeft,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
-          crossAxisAlignment: message.op == null
+          crossAxisAlignment: message.whoType == 'user'
               ? CrossAxisAlignment.end
               : CrossAxisAlignment.start,
           children: [
@@ -39,7 +40,7 @@ class ChatMessage extends StatelessWidget {
                               base64Decode(message.content.split(',')[1]))))),
               child: Container(
                 decoration: BoxDecoration(
-                    color: message.op == null
+                    color: message.whoType == 'user'
                         ? Color(0xFF1289FD)
                         : Color(0xFFE5E4EA),
                     borderRadius: BorderRadius.all(Radius.circular(8))),
@@ -75,20 +76,21 @@ class ChatMessage extends StatelessWidget {
 
   Widget buildText(BuildContext context) {
     return Align(
-      alignment:
-          message.op == null ? Alignment.centerRight : Alignment.centerLeft,
+      alignment: message.whoType == 'user'
+          ? Alignment.centerRight
+          : Alignment.centerLeft,
       child: ConstrainedBox(
         constraints:
             BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.85),
         child: Column(
-          crossAxisAlignment: message.op == null
+          crossAxisAlignment: message.whoType == 'user'
               ? CrossAxisAlignment.end
               : CrossAxisAlignment.start,
           children: [
             Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(16)),
-                  color: message.op == null
+                  color: message.whoType == 'user'
                       ? Color(0xFF1289FD)
                       : Color(0xFFE5E4EA)),
               margin: EdgeInsets.all(8),
@@ -97,7 +99,7 @@ class ChatMessage extends StatelessWidget {
                   ? Image.memory(base64Decode(message.content))
                   : Text(message.content,
                       style: TextStyle(
-                          color: message.op == null
+                          color: message.whoType == 'user'
                               ? Colors.white
                               : Colors.black)),
             ),

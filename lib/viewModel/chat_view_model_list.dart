@@ -33,7 +33,12 @@ abstract class ChatListVM with Store {
   }
 
   @action
-  addMessage({String message, bool file, String file_type, String op}) {
+  addMessage(
+      {String message,
+      bool file,
+      String file_type,
+      String op,
+      String whoType}) {
     messageList.add(ChatViewModel(
         message: Message(
       message: message,
@@ -41,6 +46,7 @@ abstract class ChatListVM with Store {
       file: file,
       file_type: file_type,
       seen: false,
+      whoType: whoType,
       createdAt: DateTime.now().toString(),
     )));
     messageStatus = MessageStatus.loaded;
