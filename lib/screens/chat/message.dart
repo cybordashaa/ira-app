@@ -106,7 +106,8 @@ class ChatMessage extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(left: 12, right: 12, bottom: 4),
               child: Text(
-                DateFormat('HH:mm').format(DateTime.parse(message.createdAt)),
+                DateFormat('HH:mm')
+                    .format(DateTime.parse(message.createdAt).toLocal()),
                 style: TextStyle(
                     color: Colors.blueGrey,
                     fontSize: 14,

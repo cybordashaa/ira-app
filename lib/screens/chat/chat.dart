@@ -30,6 +30,10 @@ class _ChatViewState extends BaseState<ChatView> {
   var vm = getIt<ChatListState>();
   // final state = getIt<ShufListState>();
 
+  // is writing
+  bool isWriting = false;
+  FocusNode textFieldFocus = FocusNode();
+
   @override
   void initState() {
     super.initState();
@@ -139,51 +143,69 @@ class _ChatViewState extends BaseState<ChatView> {
               color: Colors.black,
               height: 0.20,
             ),
-            Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(icon: Icon((Icons.image)), onPressed: selectImage),
-                  Flexible(
-                    flex: 6,
-                    child: Container(
-                      padding: EdgeInsets.all(8),
-                      child: TextField(
-                        maxLines: null,
-                        style: TextStyle(fontSize: 16.0),
-                        controller: _messageController,
-                        decoration: InputDecoration.collapsed(
-                          border: UnderlineInputBorder(),
-                          hintText: 'Message',
-                          hintStyle: TextStyle(color: Colors.grey),
-                        ),
-                        // onChanged: (text) => {
-                        //   if(text.length > 1 && text.length <3){
-                        //     SocketHelper.shared.addUsersWriting(receiver: widget.receiverID)
-                        //   }
-                        // },
-                      ),
-                    ),
-                  ),
-                  Flexible(
-                      flex: 1,
-                      child: IconButton(
-                          icon: Icon(Icons.send),
-                          onPressed: () {
-                            if (_messageController.text.trim().isNotEmpty) {
-                              SocketHelper.shared.sendMessage(
-                                  message: _messageController.text,
-                                  file: false,
-                                  type: 'text',
-                                  whoType: 'user');
-                              _messageController.clear();
-                            }
-                          }))
-                ],
-              ),
-            )
+            // message control
+            chatControls()
           ],
         ),
+      ),
+    );
+  }
+  // chat control
+
+  Widget chatControls() {
+    setWritingTo() {
+      setState(() {
+        isWriting = _messageController.text.length > 0;
+        ;
+      });
+    }
+
+    return Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          IconButton(icon: Icon((Icons.image)), onPressed: selectImage),
+          Flexible(
+            flex: 6,
+            child: Container(
+              padding: EdgeInsets.all(8),
+              child: TextField(
+                textCapitalization: TextCapitalization.sentences,
+                style: TextStyle(fontSize: 16.0),
+                controller: _messageController,
+                decoration: InputDecoration(
+                  hintText: 'мессэж',
+                  border: OutlineInputBorder(
+                      borderRadius:
+                          const BorderRadius.all(const Radius.circular(50.0)),
+                      borderSide: BorderSide.none),
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 20.0, vertical: 5),
+                  filled: true,
+                ),
+                // onChanged: (text) => {
+                //   if(text.length > 1 && text.length <3){
+                //     SocketHelper.shared.addUsersWriting(receiver: widget.receiverID)
+                //   }
+                // },
+              ),
+            ),
+          ),
+          Flexible(
+              flex: 1,
+              child: IconButton(
+                  icon: Icon(Icons.send, size: 20),
+                  onPressed: () {
+                    if (_messageController.text.trim().isNotEmpty) {
+                      SocketHelper.shared.sendMessage(
+                          message: _messageController.text,
+                          file: false,
+                          type: 'text',
+                          whoType: 'user');
+                      _messageController.clear();
+                    }
+                  }))
+        ],
       ),
     );
   }

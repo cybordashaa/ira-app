@@ -31,7 +31,6 @@ class AuthService {
       };
 
   Future<List<dynamic>> fetchMessageList() async {
-    var myID = await SharedPreferencesHelper.shared.getMyID();
     var token = await SharedPreferencesHelper.shared.getUserToken();
     var email = await SharedPreferencesHelper.shared.getUserEmail();
     var body = {"useremail": email};

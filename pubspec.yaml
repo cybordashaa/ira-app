@@ -52,6 +52,7 @@ dependencies:
   flutter_html: ^1.1.1
   # time ago
   timeago: ^2.0.29
+  intl: ^0.16.1
 
 dev_dependencies:
   flutter_test:
