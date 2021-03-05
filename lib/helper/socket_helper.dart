@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:ira_app/core/get_it.dart';
 import 'package:ira_app/helper/preferences_helper.dart';
 import 'package:ira_app/helper/stream_controller_helper.dart';
+import 'package:ira_app/provider/chat_provider.dart';
 import 'package:ira_app/viewModel/chat_view_model_list.dart';
+import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class SocketHelper {
@@ -38,11 +40,11 @@ class SocketHelper {
   //     });
   //   });
   // }
-  void connectSocket() async {
+  void connectSocket(BuildContext context) async {
     try {
       id = await SharedPreferencesHelper.shared.getMyID();
       token = await SharedPreferencesHelper.shared.getUserToken();
-      socket = IO.io('http://192.168.1.4:8001', <String, dynamic>{
+      socket = IO.io('http://192.168.0.117:8001', <String, dynamic>{
         'transports': ['websocket'],
         'autoConnect': false,
         'query': {'token': token}
@@ -53,33 +55,27 @@ class SocketHelper {
         print('connect');
         // socket.emit('example', {'msg': id}););
         socket.on('onMessage', (data) {
-          // print('------' + data);
-          // if (data['operator'] != null) {
-          //   var content = data['message'].toString();
-          //   // var uID = data['user'];
-          //   var opID = data['operator']['_id'] == null
-          //       ? null
-          //       : data['operator']['_id'];
-          //   print('--opID$opID');
-
-          //   getIt<ChatListState>().addMessage(message: content, op: null);
-          //   StreamControllerHelper.shared
-          //       .setLastIndex(getIt<ChatListState>().messageList.length);
-          // }
           var message = data['message'].toString();
           var operator = data['operator'].toString() ?? null;
           var isFile = data['file'];
           var fileType = data['file_type'];
           String whoType = data['whoType'];
           print("$whoType");
-          getIt<ChatListState>().addMessage(
-              message: message,
+          // getIt<ChatListState>().addMessage(
+          //     message: message,
+          //     op: operator,
+          //     file: isFile,
+          //     file_type: fileType,
+          //     whoType: whoType);
+          Provider.of<ChatProvider>(context, listen: false).addMessage(
+              contentMessage: message,
               op: operator,
               file: isFile,
-              file_type: fileType,
+              fileType: fileType,
               whoType: whoType);
+
           StreamControllerHelper.shared
-              .setLastIndex(getIt<ChatListState>().messageList.length);
+              .setLastIndex(getIt<ChatProvider>().messageCount);
         });
       });
 
@@ -90,7 +86,11 @@ class SocketHelper {
   }
 
   void sendMessage(
-      {@required String message, bool file, String type, String whoType}) {
+      {@required String message,
+      bool file,
+      String type,
+      String whoType,
+      var fileData}) {
     // getIt<ChatListState>().addMessage(
     //     message: message,
     //     op: null,
@@ -106,7 +106,8 @@ class SocketHelper {
       "ops": false,
       "file": file,
       "type": type,
-      "whoType": whoType
+      "whoType": whoType,
+      "fileData": fileData
     });
   }
 

@@ -1,9 +1,9 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:ira_app/screens/chat/hero_image.dart';
 import 'package:ira_app/viewModel/chat_view_model.dart';
 import 'package:intl/intl.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class ChatMessage extends StatelessWidget {
   final ChatViewModel message;
@@ -36,8 +36,8 @@ class ChatMessage extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) => HeroImage(
-                          imageProvider: MemoryImage(
-                              base64Decode(message.content.split(',')[1]))))),
+                          imageProvider: NetworkImage(
+                              'http://192.168.0.117:8001/app/upload/images/${message.content}')))),
               child: Container(
                 decoration: BoxDecoration(
                     color: message.whoType == 'user'
@@ -45,16 +45,50 @@ class ChatMessage extends StatelessWidget {
                         : Color(0xFFE5E4EA),
                     borderRadius: BorderRadius.all(Radius.circular(8))),
                 child: Padding(
-                  padding: const EdgeInsets.all(3.0),
+                  padding: const EdgeInsets.all(0.0),
                   child: Container(
-                    width: 300,
-                    height: 250,
-                    decoration: BoxDecoration(
-                        image: new DecorationImage(
+                    width: 100,
+                    height: 100,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                      child: Hero(
+                        tag: '',
+                        // child: Image(
+                        //   image: AssetImage('assets/images/cardimage.jpg'),
+                        //   fit: BoxFit.cover,
+                        //   height: 125,
+                        //   width: 350,
+                        // )
+                        child: CachedNetworkImage(
+                          imageUrl:
+                              "http://192.168.0.117:8001/app/upload/images/${message.content}",
+                          imageBuilder: (context, imageProvider) => Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                          placeholder: (context, url) => Container(
+                            height: 125,
+                            width: MediaQuery.of(context).size.width,
+                            child: Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          ),
+                          errorWidget: (context, url, error) => Image.asset(
+                            "assets/images/place.png",
                             fit: BoxFit.cover,
-                            image: MemoryImage(
-                                base64Decode(message.content.split(',')[1]))),
-                        borderRadius: BorderRadius.all(Radius.circular(8))),
+                            height: 125,
+                            width: MediaQuery.of(context).size.width,
+                          ),
+                          height: 125,
+                          width: MediaQuery.of(context).size.width,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),

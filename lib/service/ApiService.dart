@@ -5,7 +5,7 @@ import 'package:ira_app/podo/news.dart';
 import 'package:http/http.dart' as http;
 
 class Api {
-  static String baseURL = 'http://192.168.1.4:8001';
+  static String baseURL = 'http://192.168.0.117:8001';
   static String newsURL = baseURL + '/admin/news/all';
 
   static Future<News> getNews(String url) async {

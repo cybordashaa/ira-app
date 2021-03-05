@@ -27,9 +27,10 @@ class HomeScreenState extends State<HomeScreen>
   TabController controller;
   // var userData;
   String token;
+  BuildContext get context => super.context;
   @override
   void initState() {
-    SocketHelper.shared.connectSocket();
+    SocketHelper.shared.connectSocket(context);
     _getUserInfo();
     controller = new TabController(
       vsync: this,
@@ -132,13 +133,14 @@ class HomeScreenState extends State<HomeScreen>
         elevation: 10.0,
         backgroundColor: Colors.white,
         onPressed: () async {
+          SocketHelper.shared.joinRoom(ops: false);
           // Navigator.pushNamed(context, ChatScreen.routeName)
           // logout()
-          // Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new ChatScreen(token: token )))
-          SocketHelper.shared.joinRoom(ops: false);
-          getIt<ChatListState>().messageList.clear();
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => ChatView()));
+          Navigator.of(context).push(new MaterialPageRoute(
+              builder: (BuildContext context) => new ChatScreen()));
+          // getIt<ChatListState>().messageList.clear();
+          // Navigator.of(context)
+          //     .push(MaterialPageRoute(builder: (context) => ChatView()));
         },
         child: SvgPicture.asset(
           'assets/icons/logo.svg',

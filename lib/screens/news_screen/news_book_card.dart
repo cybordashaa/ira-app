@@ -57,7 +57,7 @@ class NewsBookCard extends StatelessWidget {
                     //   width: 350,
                     // )
                     child: CachedNetworkImage(
-                      imageUrl: "http://192.168.1.4:8001/images/news/$img",
+                      imageUrl: "http://192.168.0.117:8001/images/news/$img",
                       imageBuilder: (context, imageProvider) => Container(
                         decoration: BoxDecoration(
                           image: DecorationImage(

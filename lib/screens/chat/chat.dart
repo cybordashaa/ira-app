@@ -23,9 +23,8 @@ class _ChatViewState extends BaseState<ChatView> {
   ScrollController _controller = ScrollController();
   StreamSubscription<int> subscription;
 
-  final ItemScrollController itemScrollController = ItemScrollController();
-  final ItemPositionsListener itemPositionsListener =
-      ItemPositionsListener.create();
+  ItemScrollController itemScrollController;
+  ItemPositionsListener itemPositionsListener;
 
   var vm = getIt<ChatListState>();
   // final state = getIt<ShufListState>();
@@ -33,12 +32,13 @@ class _ChatViewState extends BaseState<ChatView> {
   // is writing
   bool isWriting = false;
   FocusNode textFieldFocus = FocusNode();
-
   @override
   void initState() {
-    super.initState();
+    itemScrollController = new ItemScrollController();
+    itemPositionsListener = ItemPositionsListener.create();
     getMessages();
-    SocketHelper.shared.connectSocket();
+    // SocketHelper.shared.connectSocket();
+    super.initState();
   }
 
   @override
@@ -245,9 +245,32 @@ class _ChatViewState extends BaseState<ChatView> {
   }
 
   selectImage() async {
-    File file = await FilePicker.getFile();
-    var listImage = file.readAsBytesSync();
-    var base64 = base64Encode(listImage);
-    SocketHelper.shared.sendMessage(message: base64, file: true, type: 'image');
+    // File file = await FilePicker.getFile();
+    // var listImage = file.readAsBytesSync();
+    // File image = await FilePicker.platform.
+    // print(listImage);
+    // var base64 = base64Encode(listImage);
+    // SocketHelper.shared.sendMessage(message: base64, file: true, type: 'image');
+    FilePickerResult result = await FilePicker.platform.pickFiles(
+      type: FileType.image,
+      withData: true,
+    );
+    const allowedImageTypes = ['jpg', 'png', 'jpeg'];
+
+    if (result != null) {
+      // if (!allowedImageTypes.contains(result.files.single.extension)) {
+      //   print(" no not ");
+      // }
+
+      print(result.files.single.bytes);
+      SocketHelper.shared.sendMessage(
+          message: result.files.single.name,
+          file: true,
+          type: 'image',
+          whoType: 'user',
+          fileData: result.files.single.bytes);
+    } else {
+      // User canceled the picker
+    }
   }
 }

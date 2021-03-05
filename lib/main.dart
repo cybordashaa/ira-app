@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ira_app/Theme.dart';
 import 'package:ira_app/core/get_it.dart';
+import 'package:ira_app/provider/chat_provider.dart';
 import 'package:ira_app/provider/profile_provider.dart';
 import 'package:ira_app/routes.dart';
 import 'package:ira_app/screens/login_screen/login_screen.dart';
@@ -20,7 +21,8 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => getIt<HomeProvider>()),
-        ChangeNotifierProvider(create: (_) => getIt<ProfileProvider>())
+        ChangeNotifierProvider(create: (_) => getIt<ProfileProvider>()),
+        ChangeNotifierProvider(create: (_) => getIt<ChatProvider>())
       ],
       child: MyApp(),
     ),

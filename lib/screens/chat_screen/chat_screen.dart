@@ -1,8 +1,18 @@
 import 'package:emoji_picker/emoji_picker.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:ira_app/components/widgets/custom_tile.dart';
-import 'package:ira_app/constants.dart';
+import 'package:ira_app/helper/socket_helper.dart';
+import 'package:ira_app/provider/chat_provider.dart';
 import 'package:ira_app/universal_variables.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:provider/provider.dart';
+import 'dart:async';
+import 'package:ira_app/helper/stream_controller_helper.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:ira_app/core/get_it.dart';
+import './widgets/MessageList.dart';
+import './widgets/modal.dart';
 
 class ChatScreen extends StatefulWidget {
   static String routeName = '/chat_screen';
@@ -12,11 +22,54 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   TextEditingController textEditingController = TextEditingController();
-  ScrollController _listScrollController = ScrollController();
+  StreamSubscription<int> subscription;
+  // scroll positioned
+  ItemScrollController itemScrollController;
+  ItemPositionsListener itemPositionsListener;
 
   FocusNode textFieldFocus = FocusNode();
   bool isWriting = false;
   bool showEmojiPicker = false;
+  var chat = getIt<ChatProvider>();
+  @override
+  void initState() {
+    super.initState();
+    itemScrollController = new ItemScrollController();
+    itemPositionsListener = ItemPositionsListener.create();
+    getMessages();
+  }
+
+  void dispose() async {
+    subscription.cancel();
+    textEditingController.dispose();
+    super.dispose();
+  }
+
+  getMessages() async {
+    subscription = StreamControllerHelper.shared.stream.listen((index) {
+      if (index > 1) {
+        itemScrollController.scrollTo(
+            index: index - 1, duration: Duration(milliseconds: 500));
+      }
+    });
+    final fetchMessages = Provider.of<ChatProvider>(context, listen: false);
+    await Future.microtask(() => fetchMessages.getMessages());
+    if (fetchMessages.messageCount > 0)
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        itemScrollController.jumpTo(index: fetchMessages.messageCount - 1);
+      });
+  }
+
+  // void _scrollToBottom() {
+  //   if (Provider.of<ChatProvider>(context, listen: false).messageCount != 0) {
+  //     _listScrollController.animateTo(
+  //         _listScrollController.position.maxScrollExtent,
+  //         duration: Duration(milliseconds: 300),
+  //         curve: Curves.elasticOut);
+  //   } else {
+  //     Timer(Duration(milliseconds: 400), () => _scrollToBottom());
+  //   }
+  // }
 
   showKeyBoard() => textFieldFocus.requestFocus();
   hideKeyBoard() => textFieldFocus.unfocus();
@@ -35,14 +88,20 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: todo
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
         elevation: 1.0,
       ),
+      backgroundColor: Color(0xFFF5F6F9),
       body: Column(
         children: [
-          Flexible(child: messageList()),
+          Flexible(
+              child: MessageList(
+            itemPositionsListener: itemPositionsListener,
+            itemScrollController: itemScrollController,
+          )),
           chatControls(),
           showEmojiPicker
               ? Container(
@@ -51,55 +110,6 @@ class _ChatScreenState extends State<ChatScreen> {
               : Container()
         ],
       ),
-    );
-  }
-
-  Widget messageList() {
-    return ListView.builder(
-      padding: EdgeInsets.all(10),
-      itemCount: 5,
-      itemBuilder: (context, index) {
-        return chatMessageItem();
-      },
-    );
-  }
-
-  Widget chatMessageItem() {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 15),
-      child: Container(
-        alignment: Alignment.centerRight,
-        child: senderLayout(),
-      ),
-    );
-  }
-
-// client message sender layout
-  Widget senderLayout() {
-    Radius messageRadius = Radius.circular(10);
-    return Container(
-      margin: EdgeInsets.only(top: 12),
-      constraints:
-          BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.65),
-      decoration: BoxDecoration(
-        color: kPrimaryColor,
-        borderRadius: BorderRadius.only(
-            topLeft: messageRadius,
-            topRight: messageRadius,
-            bottomLeft: messageRadius),
-      ),
-      child: Padding(
-        padding: EdgeInsets.all(10),
-        child: getMessage(),
-      ),
-    );
-  }
-
-  // get message
-  getMessage() {
-    return Text(
-      'messagesadadaasdasd \nsdfsfsfsdffsd',
-      style: TextStyle(color: Colors.white),
     );
   }
 
@@ -129,108 +139,65 @@ class _ChatScreenState extends State<ChatScreen> {
       });
     }
 
-    addMediaModal(context) {
-      showModalBottomSheet(
-          context: context,
-          elevation: 5,
-          backgroundColor: Colors.white,
-          builder: (context) {
-            return Column(
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 5),
-                  child: Row(
-                    children: <Widget>[
-                      FlatButton(
-                        child: Icon(
-                          Icons.close,
-                        ),
-                        onPressed: () => Navigator.maybePop(context),
-                      ),
-                      Expanded(
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            "Content and tools",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Flexible(
-                  child: ListView(
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 5),
-                        child: ModalTile(
-                          title: "Media",
-                          subtitle: "Share Photos and Video",
-                          icon: Icons.image,
-                          onTap: () {},
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 10,
-                        ),
-                        child: ModalTile(
-                            title: "File",
-                            subtitle: "Share files",
-                            icon: Icons.tab),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 5),
-                        child: ModalTile(
-                            title: "Contact",
-                            subtitle: "Share contacts",
-                            icon: Icons.contacts),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 5),
-                        child: ModalTile(
-                            title: "Location",
-                            subtitle: "Share a location",
-                            icon: Icons.add_location),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 5),
-                        child: ModalTile(
-                            title: "Schedule Call",
-                            subtitle: "Arrange a skype call and get",
-                            icon: Icons.schedule),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 5),
-                        child: ModalTile(
-                            title: "Create Poll",
-                            subtitle: "Share polls",
-                            icon: Icons.poll),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            );
-          });
+    sendMessage() {
+      var text = textEditingController.text;
+      setState(() {
+        isWriting = false;
+      });
+
+      if (textEditingController.text.trim().isNotEmpty) {
+        SocketHelper.shared.sendMessage(
+            message: text, file: false, type: 'text', whoType: 'user');
+        textEditingController.clear();
+        // Timer(
+        //     Duration(milliseconds: 500),
+        //     () => _listScrollController
+        //         .jumpTo(_listScrollController.position.maxScrollExtent));
+      }
+    }
+
+    selectImageSend() async {
+      FilePickerResult result = await FilePicker.platform.pickFiles(
+        type: FileType.image,
+        withData: true,
+      );
+
+      if (result != null) {
+        // if (!allowedImageTypes.contains(result.files.single.extension)) {
+        //   print(" no not ");
+        // }
+        SocketHelper.shared.sendMessage(
+            message: result.files.single.name,
+            file: true,
+            type: 'image',
+            whoType: 'user',
+            fileData: result.files.single.bytes);
+      } else {
+        // User canceled the picker
+      }
     }
 
     return Container(
       padding: EdgeInsets.all(10.0),
+      color: Colors.white,
       child: Row(
         children: [
           GestureDetector(
-            onTap: () => addMediaModal(context),
+            onTap: () => showMaterialModalBottomSheet(
+              context: context,
+              builder: (context) => ModalFit(
+                imageFunction: selectImageSend,
+              ),
+            ),
             child: Container(
               padding: EdgeInsets.all(5),
               decoration: BoxDecoration(
                   gradient: UniversalVariables.fabGradient,
                   shape: BoxShape.circle),
-              child: Icon(Icons.add),
+              child: Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
             ),
           ),
           SizedBox(
@@ -243,7 +210,17 @@ class _ChatScreenState extends State<ChatScreen> {
                 TextField(
                   controller: textEditingController,
                   focusNode: textFieldFocus,
-                  onTap: () => hideEmojicontainer(),
+                  onTap: () {
+                    Timer(
+                        Duration(milliseconds: 300),
+                        () => itemScrollController.scrollTo(
+                              duration: Duration(seconds: 2),
+                              curve: Curves.elasticOut,
+                              index: chat.messageCount - 1,
+                            ));
+
+                    hideEmojicontainer();
+                  },
                   onChanged: (val) {
                     (val.length > 0 && val.trim() != "")
                         ? setWritingTo(true)
@@ -297,9 +274,10 @@ class _ChatScreenState extends State<ChatScreen> {
                   child: IconButton(
                     icon: Icon(
                       Icons.send,
+                      color: Colors.white,
                       size: 15,
                     ),
-                    onPressed: () {},
+                    onPressed: () => sendMessage(),
                   ))
               : Container()
         ],
