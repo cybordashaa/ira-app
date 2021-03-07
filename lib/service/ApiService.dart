@@ -1,11 +1,12 @@
 import 'dart:convert';
 
+import 'package:ira_app/constants.dart';
 import 'package:ira_app/helper/preferences_helper.dart';
 import 'package:ira_app/podo/news.dart';
 import 'package:http/http.dart' as http;
 
 class Api {
-  static String baseURL = 'http://192.168.0.117:8001';
+  static String baseURL = serverURL;
   static String newsURL = baseURL + '/admin/news/all';
 
   static Future<News> getNews(String url) async {

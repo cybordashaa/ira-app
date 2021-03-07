@@ -26,7 +26,7 @@ class MessageList extends StatelessWidget {
           itemScrollController: itemScrollController,
           itemPositionsListener: itemPositionsListener,
           itemBuilder: (context, index) {
-            final message = chatProvider.messages[index];
+            final message = chatProvider.allMessages[index];
             return ChatMessageItem(message: message);
           },
         ),

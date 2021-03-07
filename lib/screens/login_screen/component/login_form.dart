@@ -172,7 +172,7 @@ class _LoginFormState extends State<LoginForm> {
       "password": password,
     };
     try {
-      var res = await AuthService().postData(data, 'user/login');
+      var res = await AuthService().postData(data, '/user/login');
       if (res.statusCode == 200) {
         var body = json.decode(res.body);
         if (body['result'] == 'success') {

@@ -8,11 +8,15 @@ class ChatProvider with ChangeNotifier {
   getMessages() async {
     setLoading(true);
     await AuthService.shared.fetchMessageList().then((messages) {
-      setMessages(messages);
       setLoading(false);
+      setMessages(messages);
     }).catchError((e) {
       throw e;
     });
+  }
+
+  List<Message> get allMessages {
+    return messages;
   }
 
   int get messageCount {
@@ -42,6 +46,11 @@ class ChatProvider with ChangeNotifier {
         file_type: fileType,
         whoType: whoType);
     messages.add(message);
+    notifyListeners();
+  }
+
+  void clearMessages() {
+    messages.clear();
     notifyListeners();
   }
 }

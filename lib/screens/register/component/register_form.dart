@@ -8,8 +8,6 @@ import 'package:ira_app/components/custom_surfix_icon.dart';
 import 'package:ira_app/components/default_button.dart';
 import 'package:ira_app/constants.dart';
 import 'package:ira_app/service/AuthService.dart';
-import 'package:ira_app/controller/DatabasHelper.dart';
-import 'package:ira_app/screens/login_screen/login_screen.dart';
 import 'package:ira_app/size_config.dart';
 
 class RegisterForm extends StatefulWidget {
@@ -17,8 +15,6 @@ class RegisterForm extends StatefulWidget {
 }
 
 class _RegisterFormState extends State<RegisterForm> {
-  DatabaseHelper databaseHelper = DatabaseHelper();
-
   final _formKey = GlobalKey<FormState>();
   final List<String> errors = [];
   String firstName;
@@ -253,10 +249,15 @@ class _RegisterFormState extends State<RegisterForm> {
         // If  you are using latest version of flutter then lable text and hint text shown like this
         // if you r using flutter less then 1.20.* then maybe this is not working properly
         floatingLabelBehavior: FloatingLabelBehavior.always,
-        suffixIcon: CustomSurffixIcon(
-          svgIcon: "assets/icons/phone.svg",
-          color: Colors.grey,
-        ),
+        suffixIcon: phoneNumberNodeFocus.hasFocus
+            ? CustomSurffixIcon(
+                svgIcon: "assets/icons/phone.svg",
+                color: kPrimaryColor,
+              )
+            : CustomSurffixIcon(
+                svgIcon: "assets/icons/phone.svg",
+                color: Colors.grey,
+              ),
       ),
     );
   }
@@ -346,7 +347,7 @@ class _RegisterFormState extends State<RegisterForm> {
       "phone": phoneNumber
     };
     try {
-      var res = await AuthService().postData(data, 'user/register');
+      var res = await AuthService().postData(data, '/user/register');
 
       if (res.statusCode == 200) {
         var body = json.decode(res.body);

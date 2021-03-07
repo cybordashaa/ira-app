@@ -1,12 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:ira_app/constants.dart';
 import 'package:ira_app/helper/preferences_helper.dart';
 import 'package:ira_app/models/message.dart';
 
 class AuthService {
   static final shared = AuthService();
-  String host = "http://192.168.0.117:8001/";
+  String host = serverURL;
   postData(data, apiUrl) async {
     var fullUrl = host + apiUrl;
     return await http
@@ -34,7 +35,7 @@ class AuthService {
     var token = await SharedPreferencesHelper.shared.getUserToken();
     var email = await SharedPreferencesHelper.shared.getUserEmail();
     var body = {"useremail": email};
-    var response = await this.authPostData(body, 'chatroom', token);
+    var response = await this.authPostData(body, '/chatroom', token);
     if (response.statusCode == 200) {
       var list = (json.decode(response.body)['messages'] as List)
           .map((e) => Message.fromJson(e))

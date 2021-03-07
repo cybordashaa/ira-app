@@ -106,7 +106,7 @@ class ChatMessageItem extends StatelessWidget {
           MaterialPageRoute(
               builder: (context) => HeroImage(
                   imageProvider: NetworkImage(
-                      'http://192.168.0.117:8001/app/upload/images/${message.message}')))),
+                      '$serverURL/app/upload/images/${message.message}')))),
       child: Container(
         decoration: BoxDecoration(
             color: message.whoType == 'user'
@@ -116,42 +116,32 @@ class ChatMessageItem extends StatelessWidget {
         child: Container(
           child: ClipRRect(
             borderRadius: BorderRadius.all(Radius.circular(8)),
-            child: Hero(
-              tag: '${message.message}',
-              // child: Image(
-              //   image: AssetImage('assets/images/cardimage.jpg'),
-              //   fit: BoxFit.cover,
-              //   height: 125,
-              //   width: 350,
-              // )
-              child: CachedNetworkImage(
-                imageUrl:
-                    "http://192.168.0.117:8001/app/upload/images/${message.message}",
-                imageBuilder: (context, imageProvider) => Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: imageProvider,
-                      fit: BoxFit.cover,
-                    ),
+            child: CachedNetworkImage(
+              imageUrl: "$serverURL/app/upload/images/${message.message}",
+              imageBuilder: (context, imageProvider) => Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: imageProvider,
+                    fit: BoxFit.cover,
                   ),
                 ),
-                placeholder: (context, url) => Container(
-                  height: 125,
-                  width: MediaQuery.of(context).size.width,
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                ),
-                errorWidget: (context, url, error) => Image.asset(
-                  "assets/images/place.png",
-                  fit: BoxFit.cover,
-                  height: 125,
-                  width: MediaQuery.of(context).size.width,
-                ),
+              ),
+              placeholder: (context, url) => Container(
                 height: 125,
                 width: MediaQuery.of(context).size.width,
-                fit: BoxFit.cover,
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
               ),
+              errorWidget: (context, url, error) => Image.asset(
+                "assets/images/place.png",
+                fit: BoxFit.cover,
+                height: 125,
+                width: MediaQuery.of(context).size.width,
+              ),
+              height: 125,
+              width: MediaQuery.of(context).size.width,
+              fit: BoxFit.cover,
             ),
           ),
         ),

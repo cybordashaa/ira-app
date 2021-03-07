@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ira_app/size_config.dart';
 
+const serverURL = 'http://192.168.1.2:8001';
 const kPrimaryColor = Color(0xFF008197);
 const kPrimaryLightColor = Color(0xFFFFECDF);
 const kPrimaryGradientColor = LinearGradient(

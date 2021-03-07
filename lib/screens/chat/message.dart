@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:ira_app/constants.dart';
 import 'package:ira_app/screens/chat/hero_image.dart';
 import 'package:ira_app/viewModel/chat_view_model.dart';
 import 'package:intl/intl.dart';
@@ -37,7 +38,7 @@ class ChatMessage extends StatelessWidget {
                   MaterialPageRoute(
                       builder: (context) => HeroImage(
                           imageProvider: NetworkImage(
-                              'http://192.168.0.117:8001/app/upload/images/${message.content}')))),
+                              '$serverURL/app/upload/images/${message.content}')))),
               child: Container(
                 decoration: BoxDecoration(
                     color: message.whoType == 'user'
@@ -61,7 +62,7 @@ class ChatMessage extends StatelessWidget {
                         // )
                         child: CachedNetworkImage(
                           imageUrl:
-                              "http://192.168.0.117:8001/app/upload/images/${message.content}",
+                              "$serverURL/app/upload/images/${message.content}",
                           imageBuilder: (context, imageProvider) => Container(
                             decoration: BoxDecoration(
                               image: DecorationImage(

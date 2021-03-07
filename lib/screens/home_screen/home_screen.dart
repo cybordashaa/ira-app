@@ -27,10 +27,11 @@ class HomeScreenState extends State<HomeScreen>
   TabController controller;
   // var userData;
   String token;
-  BuildContext get context => super.context;
+  // BuildContext get context => super.context;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   void initState() {
-    SocketHelper.shared.connectSocket(context);
+    // SocketHelper.shared.connectSocket(_scaffoldKey.currentContext);
     _getUserInfo();
     controller = new TabController(
       vsync: this,
@@ -54,6 +55,11 @@ class HomeScreenState extends State<HomeScreen>
     });
   }
 
+  void didChangeDependencies() {
+    SocketHelper.shared.connectSocket();
+    super.didChangeDependencies();
+  }
+
   void _handleTabSelection() {
     setState(() {});
   }
@@ -71,6 +77,7 @@ class HomeScreenState extends State<HomeScreen>
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: Color(0xFFF5F6F9),
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(70.0),
@@ -133,11 +140,13 @@ class HomeScreenState extends State<HomeScreen>
         elevation: 10.0,
         backgroundColor: Colors.white,
         onPressed: () async {
-          SocketHelper.shared.joinRoom(ops: false);
-          // Navigator.pushNamed(context, ChatScreen.routeName)
+          Navigator.pushNamed(
+              _scaffoldKey.currentContext, ChatScreen.routeName);
           // logout()
-          Navigator.of(context).push(new MaterialPageRoute(
-              builder: (BuildContext context) => new ChatScreen()));
+          // Navigator.of(context).push(new MaterialPageRoute(
+          //     builder: (BuildContext context) => new ChatScreen()));
+
+          SocketHelper.shared.joinRoom(ops: false);
           // getIt<ChatListState>().messageList.clear();
           // Navigator.of(context)
           //     .push(MaterialPageRoute(builder: (context) => ChatView()));

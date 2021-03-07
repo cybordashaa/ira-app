@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:ira_app/constants.dart';
 import 'package:ira_app/core/get_it.dart';
 import 'package:ira_app/helper/preferences_helper.dart';
 import 'package:ira_app/helper/stream_controller_helper.dart';
 import 'package:ira_app/provider/chat_provider.dart';
 import 'package:ira_app/viewModel/chat_view_model_list.dart';
-import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class SocketHelper {
@@ -14,37 +14,11 @@ class SocketHelper {
   IO.Socket socket;
   var id;
   var token;
-
-  // void connectSocket() async {
-  //   token = await SharedPreferencesHelper.shared.getUserToken();
-  //   id = await SharedPreferencesHelper.shared.getMyID();
-  //   socket = IO.io('http://192.168.0.111:8001', <String, dynamic>{
-  //     'transports': ['websocket'],
-  //     'autoConnect': false,
-  //     'query': {'token': token}
-  //   });
-  //   socket.connect();
-
-  //   socket.on('connection', (_) {
-  //     print("connect");
-  //     socket.emit('example', {'msg': "client msg send"});
-  //     socket.on('onMessage', (data) {
-  //       print(data);
-  //       var content = data['message'].toString();
-  //       var uID = data['user'];
-  //       var opID = data['operator'].toString();
-
-  //       getIt<ChatListState>().addMessage(message: content, op: opID);
-  //       StreamControllerHelper.shared
-  //           .setLastIndex(getIt<ChatListState>().messageList.length);
-  //     });
-  //   });
-  // }
-  void connectSocket(BuildContext context) async {
+  void connectSocket() async {
     try {
       id = await SharedPreferencesHelper.shared.getMyID();
       token = await SharedPreferencesHelper.shared.getUserToken();
-      socket = IO.io('http://192.168.0.117:8001', <String, dynamic>{
+      socket = IO.io(serverURL, <String, dynamic>{
         'transports': ['websocket'],
         'autoConnect': false,
         'query': {'token': token}
@@ -67,7 +41,7 @@ class SocketHelper {
           //     file: isFile,
           //     file_type: fileType,
           //     whoType: whoType);
-          Provider.of<ChatProvider>(context, listen: false).addMessage(
+          getIt<ChatProvider>().addMessage(
               contentMessage: message,
               op: operator,
               file: isFile,

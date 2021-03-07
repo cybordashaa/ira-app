@@ -43,8 +43,7 @@ class DetailScreen extends StatelessWidget {
                           width: MediaQuery.of(context).size.width,
                           height: double.infinity,
                           child: CachedNetworkImage(
-                            imageUrl:
-                                "http://192.168.0.117:8001/images/news/${newsLists.image}",
+                            imageUrl: "$serverURL/news/${newsLists.image}",
                             imageBuilder: (context, imageProvider) => Container(
                               decoration: BoxDecoration(
                                 image: DecorationImage(
